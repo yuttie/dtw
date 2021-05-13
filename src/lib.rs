@@ -50,9 +50,9 @@ mod rs {
 
     /// Compute a DP table.
     pub fn dp<'a, S: Sync + Data + RawData<Elem = u32>>(s: &[usize], t: &[usize], d: &ArrayBase<S, Ix2>) -> Array2<u32> {
-        let m = s.len();
-        let n = t.len();
-        let mut table = Array2::<u32>::zeros((m + 1, n + 1));
+        let n = s.len();
+        let m = t.len();
+        let mut table = Array2::<u32>::zeros((n + 1, m + 1));
 
         table[[0, 0]] = 0;
 
@@ -63,20 +63,20 @@ mod rs {
             table[[i, j]] = cost + table[[i - 1, j - 1]];
         }
 
-        for i in 2..=m {
+        for i in 2..=n {
             let j = 1;
             let cost = d[[s[i - 1], t[j - 1]]];
             table[[i, j]] = cost + table[[i - 1, j]];
         }
 
-        for j in 2..=n {
+        for j in 2..=m {
             let i = 1;
             let cost = d[[s[i - 1], t[j - 1]]];
             table[[i, j]] = cost + table[[i, j - 1]];
         }
 
-        for i in 2..=m {
-            for j in 2..=n {
+        for i in 2..=n {
+            for j in 2..=m {
                 let cost = d[[s[i - 1], t[j - 1]]];
                 table[[i, j]] = cost + min(min(table[[i - 1, j]], table[[i, j - 1]]), table[[i - 1, j - 1]]);
             }
@@ -125,10 +125,10 @@ mod rs {
 
     /// Compute the distance between two given sequences.
     pub fn dist<'a, S: Sync + Data + RawData<Elem = u32>>(s: &[usize], t: &[usize], d: &ArrayBase<S, Ix2>) -> u32 {
-        let m = s.len();
-        let n = t.len();
+        let n = s.len();
+        let m = t.len();
         let table = dp(s, t, &d);
-        table[[m, n]]
+        table[[n, m]]
     }
 
     /// Compute pairwise distances between sequences.
