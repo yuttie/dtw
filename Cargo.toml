@@ -1,0 +1,18 @@
+[package]
+name = "dtw"
+version = "0.1.0"
+authors = ["Yuta Taniguchi <yuta.taniguchi.y.t@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "dtw"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = "0.13.1"
+numpy = "0.13.0"
+ndarray = { version = "0.14.0", features = ["rayon"] }
+
+[features]
+extension-module = ["pyo3/extension-module"]
+default = ["extension-module"]
